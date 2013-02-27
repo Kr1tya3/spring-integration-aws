@@ -124,6 +124,7 @@ public class AmazonSQSMessageSource extends IntegrationObjectSupport implements
 					@Override
 					public void afterCompletion(int status) {
 						if(status == TransactionSynchronization.STATUS_ROLLED_BACK) {
+                                                        redeliveryStrategy.notifyFailure(messageId);
 							if(!redeliveryStrategy.canRedeliver(messageId)) {
 								if(logger.isInfoEnabled()) {
 									if(redeliveryStrategy instanceof AmazonSQSRedeliveryCountDeliveryStrategy) {
